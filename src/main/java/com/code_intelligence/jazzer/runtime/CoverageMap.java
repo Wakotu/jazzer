@@ -27,7 +27,8 @@ import java.util.Set;
 import sun.misc.Unsafe;
 
 /**
- * Represents the Java view on a libFuzzer 8 bit counter coverage map. By using a direct ByteBuffer,
+ * Represents the Java view on a libFuzzer 8 bit counter coverage map. By using
+ * a direct ByteBuffer,
  * the counters are shared directly with native code.
  */
 public final class CoverageMap {
@@ -37,10 +38,9 @@ public final class CoverageMap {
 
   private static final String ENV_MAX_NUM_COUNTERS = "JAZZER_MAX_NUM_COUNTERS";
 
-  private static final int MAX_NUM_COUNTERS =
-      System.getenv(ENV_MAX_NUM_COUNTERS) != null
-          ? Integer.parseInt(System.getenv(ENV_MAX_NUM_COUNTERS))
-          : 1 << 20;
+  private static final int MAX_NUM_COUNTERS = System.getenv(ENV_MAX_NUM_COUNTERS) != null
+      ? Integer.parseInt(System.getenv(ENV_MAX_NUM_COUNTERS))
+      : 1 << 20;
 
   private static final Unsafe UNSAFE = UnsafeProvider.getUnsafe();
   private static final Class<?> LOG;
@@ -49,25 +49,25 @@ public final class CoverageMap {
 
   static {
     try {
-      LOG =
-          Class.forName(
-              "com.code_intelligence.jazzer.utils.Log", false, ClassLoader.getSystemClassLoader());
-      LOG_INFO =
-          MethodHandles.lookup()
-              .findStatic(LOG, "info", MethodType.methodType(void.class, String.class));
-      LOG_ERROR =
-          MethodHandles.lookup()
-              .findStatic(
-                  LOG, "error", MethodType.methodType(void.class, String.class, Throwable.class));
+      LOG = Class.forName(
+          "com.code_intelligence.jazzer.utils.Log", false, ClassLoader.getSystemClassLoader());
+      LOG_INFO = MethodHandles.lookup()
+          .findStatic(LOG, "info", MethodType.methodType(void.class, String.class));
+      LOG_ERROR = MethodHandles.lookup()
+          .findStatic(
+              LOG, "error", MethodType.methodType(void.class, String.class, Throwable.class));
     } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException e) {
       throw new RuntimeException(e);
     }
   }
 
   /**
-   * The collection of coverage counters directly interacted with by classes that are instrumented
-   * for coverage. The instrumentation assumes that this is always one contiguous block of memory,
-   * so it is allocated once at maximum size. Using a larger number here increases the memory usage
+   * The collection of coverage counters directly interacted with by classes that
+   * are instrumented
+   * for coverage. The instrumentation assumes that this is always one contiguous
+   * block of memory,
+   * so it is allocated once at maximum size. Using a larger number here increases
+   * the memory usage
    * of all fuzz targets, but has otherwise no impact on performance.
    */
   public static final long countersAddress = UNSAFE.allocateMemory(MAX_NUM_COUNTERS);
@@ -84,8 +84,10 @@ public final class CoverageMap {
   }
 
   /**
-   * The number of coverage counters that are currently registered with libFuzzer. This number grows
-   * dynamically as classes are instrumented and should be kept as low as possible as libFuzzer has
+   * The number of coverage counters that are currently registered with libFuzzer.
+   * This number grows
+   * dynamically as classes are instrumented and should be kept as low as possible
+   * as libFuzzer has
    * to iterate over the whole map for every execution.
    */
   private static int currentNumCounters = INITIAL_NUM_COUNTERS;
@@ -165,7 +167,8 @@ public final class CoverageMap {
     }
   }
 
-  // Returns the IDs of all blocks that have been covered in at least one run (not just the current
+  // Returns the IDs of all blocks that have been covered in at least one run (not
+  // just the current
   // one).
   public static native int[] getEverCoveredIds();
 

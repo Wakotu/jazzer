@@ -2,3 +2,7 @@
 .ijwb
 .clwb
 /coverage
+
+.settings/
+.project
+.classpath
